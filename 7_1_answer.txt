@@ -1,13 +1,53 @@
 What is the defining property of Gaussian noise?
 
+TODO
 
+https://en.wikipedia.org/wiki/
+"Gaussian noise is statistical noise having a probability density function (PDF) equal to that of the normal distribution, which is also known as the Gaussian distribution."
+
+# TODO remove comments from books
+source: chapter 2
+S. 26
+Signals formed from random processes usually have a bell shaped pdf (probability density function or probability distribution function).
+This is called a normal distribution, a Gauss distribution, or a Gaussian.
+
+S. 30
+Algorithms  need  to  be  tested  using  the  same  kind  of  data  they  will encounter  in  actual  operation.
+This  creates  the  need  to  generate  digital noise  with  a  Gaussian  pdf.
+There  are  two  methods  for  generating  such signals using a random number generator
+.
+The Central Limit Theorem provides the reason why normally distributed signals are seen so widely innature.
+Whenever  many  different  random  forces  are  interacting,  the resulting pdf becomes a Gaussian.
 ################################################################################
 
 What does a low-pass filter do in general?
 
+In general a "low-pass filter is designed to block all frequencies above the cutoff frequency (the stopband),
+while passing all frequencies below (the passband)." (chapter 3, p. 52)
+E. g. digital low-pass filters can be utilized for noise reduction, signal separation, wave shaping, etc. (chapter 7, p. 128)
 
 ################################################################################
 
 Is a moving average filter a low-pass or a high-pass filter? Why?
+
+We assume that the moving average filter is a low-pass filter because according to the book
+the moving average filter is "an exceptionally bad low-pass filter (the action in the frequency domain)"
+and "an exceptionally good smoothing filter (the  action in the time domain)" (chapter 15, S. 280).
+Another reason is that the term high-pass filter was not mentioned in this chapter.
+
+# TODO remove comment when task is finished
+# notes
+As the name implies, the moving average filter operates by averaging a number of points from the input signal to produce each point in the output signal.
+
+S. 277
+In spite of its simplicity, the moving average filter is optimal for a common task: reducing random noise while retaining a sharp step response.
+This makes it the premier filter for time domain encoded signals.
+However, the moving average is the worst filter for frequency domain encoded signals, with little ability to separate one band of frequencies from another.
+
+S. 278
+Not  only  is  the  moving  average  filter  very  good  for  many applications, it is optimal for a common problem, reducing random white noise while keeping the sharpest step response.
+
+S. 280
+In  short, the moving average is an exceptionally good smoothing filter (the  action in the time domain), but an exceptionally bad low-pass filter (the action in the frequency domain).
 
 
