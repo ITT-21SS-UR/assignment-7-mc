@@ -1,0 +1,2 @@
+class AnalyzeModel:
+    pass

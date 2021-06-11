@@ -145,6 +145,10 @@ class DIPPIDNode(Node):
     def process(self, **kwdargs):
         return {'accelX': np.array([self._acc_vals[0]]), 'accelY': np.array([self._acc_vals[1]]), 'accelZ': np.array([self._acc_vals[2]])}
 
+    def set_port(self, port):  # TODO is it allowed to add this?
+        self.addr = port
+        self.text.setText(str(self.addr))
+
 fclib.registerNodeType(DIPPIDNode, [('Sensor',)])
 
 if __name__ == '__main__':
