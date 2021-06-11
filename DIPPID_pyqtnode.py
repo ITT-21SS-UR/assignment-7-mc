@@ -2,14 +2,16 @@
 # coding: utf-8
 # -*- coding: utf-8 -*-
 
-from pyqtgraph.flowchart import Flowchart, Node
-from pyqtgraph.flowchart.library.common import CtrlNode
-import pyqtgraph.flowchart.library as fclib
-from pyqtgraph.Qt import QtGui, QtCore
-import pyqtgraph as pg
-import numpy as np
-from DIPPID import SensorUDP
 import sys
+
+import numpy as np
+import pyqtgraph as pg
+import pyqtgraph.flowchart.library as fclib
+from pyqtgraph.flowchart.library.common import CtrlNode
+from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.flowchart import Flowchart, Node
+
+from DIPPID import SensorUDP
 
 
 class BufferNode(Node):
@@ -35,6 +37,7 @@ class BufferNode(Node):
         self._buffer = np.append(self._buffer, kwds['dataIn'])[-self.buffer_size:]
 
         return {'dataOut': self._buffer}
+
 
 fclib.registerNodeType(BufferNode, [('Data',)])
 
@@ -143,11 +146,13 @@ class DIPPIDNode(Node):
             self.update_timer.start(1000 / rate)
 
     def process(self, **kwdargs):
-        return {'accelX': np.array([self._acc_vals[0]]), 'accelY': np.array([self._acc_vals[1]]), 'accelZ': np.array([self._acc_vals[2]])}
+        return {'accelX': np.array([self._acc_vals[0]]), 'accelY': np.array([self._acc_vals[1]]),
+                'accelZ': np.array([self._acc_vals[2]])}
 
-    def set_port(self, port):  # TODO is it allowed to add this?
+    def set_port(self, port):
         self.addr = port
         self.text.setText(str(self.addr))
+
 
 fclib.registerNodeType(DIPPIDNode, [('Sensor',)])
 

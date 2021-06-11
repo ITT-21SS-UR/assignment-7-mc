@@ -1,74 +1,16 @@
 import sys
-from enum import Enum
 
-import numpy as np
 import pyqtgraph as pg
 from PyQt5 import QtWidgets
 from pyqtgraph.Qt import QtGui, QtCore
-from pyqtgraph.flowchart import Flowchart, Node
+from pyqtgraph.flowchart import Flowchart
+
 from DIPPID_pyqtnode import BufferNode, DIPPIDNode
+from custom_nodes import LogNode, NormalVectorNode, FlowchartType
+
 
 # Author: Claudia
 # Reviewer: Martina
-class FlowchartType(Enum):
-    dippid = "DIPPID"
-    buffer = "Buffer"
-    plot_widget = "PlotWidget"
-    normal_vector = "NormalVector"
-    log = "Log"
-
-
-# TODO is it allowed to move it to DIPPID_pyqtnode and modify this file? else move to separate class
-class NormalVectorNode(Node):
-    nodeName = FlowchartType.normal_vector.value
-
-    def __init__(self, name):
-        # TODO what is needed for normal vector
-        terminals = {
-            'dataIn': dict(io='in'),
-            'dataOut': dict(io='out'),
-        }
-        # TODO
-        self.buffer_size = 32
-        self._buffer = np.array([])
-        Node.__init__(self, name, terminals=terminals)
-
-    def process(self, **kwds):
-        # TODO
-        self._buffer = np.append(self._buffer, kwds['dataIn'])[-self.buffer_size:]
-
-        return {'dataOut': self._buffer}
-
-
-# fclib.registerNodeType(NormalVectorNode, [("NormalVector",)])
-
-
-# TODO is it allowed to move it to DIPPID_pyqtnode? else move to separate class
-class LogNode(Node):
-    nodeName = FlowchartType.log.value
-
-    # TODO a LogNode that reads values (e.g., accelerometer data) from its input terminal and writes them to stdout.
-    def __init__(self, name):
-        # TODO what is needed for log
-        terminals = {
-            'dataIn': dict(io='in'),
-            'dataOut': dict(io='out'),
-        }
-        # TODO
-        self.buffer_size = 32
-        self._buffer = np.array([])
-        Node.__init__(self, name, terminals=terminals)
-
-    def process(self, **kwds):
-        # TODO
-        self._buffer = np.append(self._buffer, kwds['dataIn'])[-self.buffer_size:]
-
-        return {'dataOut': self._buffer}
-
-
-# fclib.registerNodeType(LogNode, [("Log",)])
-
-
 class MainWindow(QtWidgets.QWidget):
 
     def __init__(self, port_number=None):
@@ -91,72 +33,83 @@ class MainWindow(QtWidgets.QWidget):
 
         self.__setup_dippid()
 
-        # TODO change all position values for flowchart
         self.__setup_accelerometer_x()
         self.__setup_accelerometer_y()
         self.__setup_accelerometer_z()
         self.__setup_normal_vector()
 
+        self.__setup_log()
+
         self.setLayout(self.__layout)
 
     def __setup_dippid(self):
-        self.__dippid_node = self.__flow_chart.createNode("DIPPID", pos=(0, 0))
+        self.__dippid_node = self.__flow_chart.createNode(FlowchartType.dippid.value, pos=(0, 0))
         self.__dippid_node.set_port(self.__port_number)
 
     def __setup_accelerometer_x(self):
         plot_widget = pg.PlotWidget()
-        self.__layout.addWidget(plot_widget, 0, 1)
         plot_widget.setTitle("accelerometer x")
-        plot_widget.setYRange(0, 1)  # TODO valid range
+        plot_widget.setYRange(-2, 2)
+        self.__layout.addWidget(plot_widget, 0, 1)
 
-        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(0, -150))
+        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(300, -100))
         plot_widget_node.setPlot(plot_widget)
 
-        buffer_node = self.__flow_chart.createNode(FlowchartType.buffer.value, pos=(150, 0))
+        buffer_node = self.__flow_chart.createNode(FlowchartType.buffer.value, pos=(150, -100))
+
         self.__flow_chart.connectTerminals(self.__dippid_node["accelX"], buffer_node["dataIn"])
         self.__flow_chart.connectTerminals(buffer_node["dataOut"], plot_widget_node["In"])
 
     def __setup_accelerometer_y(self):
         plot_widget = pg.PlotWidget()
-        self.__layout.addWidget(plot_widget, 0, 2)
         plot_widget.setTitle("accelerometer y")
-        plot_widget.setYRange(0, 1)  # TODO valid range
+        plot_widget.setYRange(-2, 2)
+        self.__layout.addWidget(plot_widget, 0, 2)
 
-        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(0, -150))
+        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(300, -50))
         plot_widget_node.setPlot(plot_widget)
 
-        buffer_node = self.__flow_chart.createNode(FlowchartType.buffer.value, pos=(150, 0))
+        buffer_node = self.__flow_chart.createNode(FlowchartType.buffer.value, pos=(150, -50))
+
         self.__flow_chart.connectTerminals(self.__dippid_node["accelY"], buffer_node["dataIn"])
         self.__flow_chart.connectTerminals(buffer_node["dataOut"], plot_widget_node["In"])
 
     def __setup_accelerometer_z(self):
         plot_widget = pg.PlotWidget()
-        self.__layout.addWidget(plot_widget, 1, 1)
         plot_widget.setTitle("accelerometer z")
-        plot_widget.setYRange(0, 1)  # TODO valid range
+        plot_widget.setYRange(-2, 2)
+        self.__layout.addWidget(plot_widget, 1, 1)
 
-        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(0, -150))
+        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(300, 80))
         plot_widget_node.setPlot(plot_widget)
 
-        buffer_node = self.__flow_chart.createNode(FlowchartType.buffer.value, pos=(150, 0))
+        buffer_node = self.__flow_chart.createNode(FlowchartType.buffer.value, pos=(150, 80))
+
         self.__flow_chart.connectTerminals(self.__dippid_node["accelZ"], buffer_node["dataIn"])
         self.__flow_chart.connectTerminals(buffer_node["dataOut"], plot_widget_node["In"])
 
     def __setup_normal_vector(self):
-        # TODO setup normal vector
         plot_widget = pg.PlotWidget()
-        self.__layout.addWidget(plot_widget, 1, 2)
         plot_widget.setTitle("normal vector")
         plot_widget.setYRange(0, 1)  # TODO valid range
+        self.__layout.addWidget(plot_widget, 1, 2)
 
-        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(0, -150))
+        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(300, 130))
         plot_widget_node.setPlot(plot_widget)
+
+        # TODO setup normal vector
+
+    def __setup_log(self):
+        log_node = self.__flow_chart.createNode(FlowchartType.log.value, pos=(150, 0))
+
+        self.__flow_chart.connectTerminals(self.__dippid_node["accelX"], log_node["accelX"])
+        self.__flow_chart.connectTerminals(self.__dippid_node["accelY"], log_node["accelY"])
+        self.__flow_chart.connectTerminals(self.__dippid_node["accelZ"], log_node["accelZ"])
 
 
 def start_program():
-    # TODO what should be done with the port number -> set port of MainWindow Text in DIPPID
     # port_number = read_port_number()  # TODO use that
-    port_number = 5700  # TODO remove after debugging / finished
+    port_number = 5700
 
     app = QtGui.QApplication([])
     main_window = MainWindow(port_number)
