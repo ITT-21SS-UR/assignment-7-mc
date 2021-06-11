@@ -18,8 +18,8 @@ class MainWindow(QtWidgets.QWidget):
 
         self.__port_number = port_number
 
-        self.__setup_main_window()
         self.__setup_flowchart()
+        self.__setup_main_window()
 
     def __setup_main_window(self):
         self.setWindowTitle("Analyze")
@@ -91,13 +91,19 @@ class MainWindow(QtWidgets.QWidget):
     def __setup_normal_vector(self):
         plot_widget = pg.PlotWidget()
         plot_widget.setTitle("normal vector")
-        plot_widget.setYRange(0, 1)  # TODO valid range
+        # TODO better range?
+        plot_widget.setYRange(-2, 2)
+        plot_widget.setXRange(-2, 2)
         self.__layout.addWidget(plot_widget, 1, 2)
 
         plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(300, 130))
         plot_widget_node.setPlot(plot_widget)
 
-        # TODO setup normal vector
+        self.__normal_vector_node = self.__flow_chart.createNode(FlowchartType.normal_vector.value, pos=(150, 130))
+
+        self.__flow_chart.connectTerminals(self.__dippid_node["accelX"], self.__normal_vector_node["accelX"])
+        self.__flow_chart.connectTerminals(self.__dippid_node["accelZ"], self.__normal_vector_node["accelZ"])
+        self.__flow_chart.connectTerminals(self.__normal_vector_node["rotation"], plot_widget_node["In"])
 
     def __setup_log(self):
         log_node = self.__flow_chart.createNode(FlowchartType.log.value, pos=(150, 0))
@@ -105,11 +111,11 @@ class MainWindow(QtWidgets.QWidget):
         self.__flow_chart.connectTerminals(self.__dippid_node["accelX"], log_node["accelX"])
         self.__flow_chart.connectTerminals(self.__dippid_node["accelY"], log_node["accelY"])
         self.__flow_chart.connectTerminals(self.__dippid_node["accelZ"], log_node["accelZ"])
+        self.__flow_chart.connectTerminals(self.__normal_vector_node["rotation"], log_node["rotation"])
 
 
 def start_program():
-    # port_number = read_port_number()  # TODO use that
-    port_number = 5700
+    port_number = read_port_number()
 
     app = QtGui.QApplication([])
     main_window = MainWindow(port_number)
