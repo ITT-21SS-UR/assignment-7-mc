@@ -2,6 +2,8 @@ What is the defining property of Gaussian noise?
 
 TODO
 
+The noise is created with the Gaussian pdf (probability density function) to test algorithm with “the same kind of data they will encounter in actual operation” (Chapter 2: Statistics, Digital Noise Generation)
+
 https://en.wikipedia.org/wiki/
 "Gaussian noise is statistical noise having a probability density function (PDF) equal to that of the normal distribution, which is also known as the Gaussian distribution."
 
@@ -26,6 +28,11 @@ In general a "low-pass filter is designed to block all frequencies above the cut
 while passing all frequencies below (the passband)." (chapter 3, p. 52)
 E. g. digital low-pass filters can be utilized for noise reduction, signal separation, wave shaping, etc. (chapter 7, p. 128)
 
+“All frequencies below the cutoff frequency, fc, are passed with unity amplitude, while all higher frequencies are blocked.”
+(chapter 16, Windowed-Sinc Filters - Strategy of the Windowed-Sinc)
+
+By converting low pass filter to the correct respond High-pass, band-pass and band-reject filters are designed.
+
 ################################################################################
 
 Is a moving average filter a low-pass or a high-pass filter? Why?
@@ -34,6 +41,7 @@ We assume that the moving average filter is a low-pass filter because according 
 the moving average filter is "an exceptionally bad low-pass filter (the action in the frequency domain)"
 and "an exceptionally good smoothing filter (the  action in the time domain)" (chapter 15, S. 280).
 Another reason is that the term high-pass filter was not mentioned in this chapter.
+Also the filter reduces “random white noise while keeping the sharpest [highest] step response", what a low pass filter would do.
 
 # TODO remove comment when task is finished
 # notes
