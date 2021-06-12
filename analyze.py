@@ -5,10 +5,12 @@ from PyQt5 import QtWidgets
 from pyqtgraph.Qt import QtGui, QtCore
 from pyqtgraph.flowchart import Flowchart
 
-from DIPPID_pyqtnode import BufferNode, DIPPIDNode
 from custom_nodes import LogNode, NormalVectorNode, FlowchartType
+from DIPPID_pyqtnode import BufferNode, DIPPIDNode
 
 
+# start program example:
+# python3 analyze.py 5700
 # Author: Claudia
 # Reviewer: Martina
 class MainWindow(QtWidgets.QWidget):
@@ -80,10 +82,10 @@ class MainWindow(QtWidgets.QWidget):
         plot_widget.setYRange(-2, 2)
         self.__layout.addWidget(plot_widget, 1, 1)
 
-        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(300, 80))
+        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(300, 35))
         plot_widget_node.setPlot(plot_widget)
 
-        buffer_node = self.__flow_chart.createNode(FlowchartType.buffer.value, pos=(150, 80))
+        buffer_node = self.__flow_chart.createNode(FlowchartType.buffer.value, pos=(150, 35))
 
         self.__flow_chart.connectTerminals(self.__dippid_node["accelZ"], buffer_node["dataIn"])
         self.__flow_chart.connectTerminals(buffer_node["dataOut"], plot_widget_node["In"])
@@ -91,22 +93,21 @@ class MainWindow(QtWidgets.QWidget):
     def __setup_normal_vector(self):
         plot_widget = pg.PlotWidget()
         plot_widget.setTitle("normal vector")
-        # TODO better range?
         plot_widget.setYRange(-2, 2)
         plot_widget.setXRange(-2, 2)
         self.__layout.addWidget(plot_widget, 1, 2)
 
-        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(300, 130))
+        plot_widget_node = self.__flow_chart.createNode(FlowchartType.plot_widget.value, pos=(300, 80))
         plot_widget_node.setPlot(plot_widget)
 
-        self.__normal_vector_node = self.__flow_chart.createNode(FlowchartType.normal_vector.value, pos=(150, 130))
+        self.__normal_vector_node = self.__flow_chart.createNode(FlowchartType.normal_vector.value, pos=(150, 80))
 
         self.__flow_chart.connectTerminals(self.__dippid_node["accelX"], self.__normal_vector_node["accelX"])
         self.__flow_chart.connectTerminals(self.__dippid_node["accelZ"], self.__normal_vector_node["accelZ"])
         self.__flow_chart.connectTerminals(self.__normal_vector_node["rotation"], plot_widget_node["In"])
 
     def __setup_log(self):
-        log_node = self.__flow_chart.createNode(FlowchartType.log.value, pos=(150, 0))
+        log_node = self.__flow_chart.createNode(FlowchartType.log.value, pos=(150, 140))
 
         self.__flow_chart.connectTerminals(self.__dippid_node["accelX"], log_node["accelX"])
         self.__flow_chart.connectTerminals(self.__dippid_node["accelY"], log_node["accelY"])

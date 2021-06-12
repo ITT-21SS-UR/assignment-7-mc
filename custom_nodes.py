@@ -6,6 +6,7 @@ import pyqtgraph.flowchart.library as fclib
 from pyqtgraph.flowchart import Node
 
 
+# custom nodes for task 7.3
 # Author: Claudia
 # Reviewer: Martina
 class FlowchartType(Enum):
@@ -30,12 +31,6 @@ class NormalVectorNode(Node):
         Node.__init__(self, name, terminals=terminals)
 
     def process(self, **kwargs):
-        # TODO which one
-        #   this looks a bit different from video
-        # normal_x = kwargs["accelZ"][0]
-        # normal_y = kwargs["accelX"][0]
-
-        # perspective from lying on the table (similar to video)
         normal_x = -kwargs["accelX"][0]
         normal_y = kwargs["accelZ"][0]
 
@@ -64,7 +59,7 @@ class LogNode(Node):
             "accelY": dict(io="in"),
             "accelZ": dict(io="in"),
             "rotation": dict(io="in"),
-            "dataOut": dict(io="out")
+            "dataLog": dict(io="out")
         }
 
         Node.__init__(self, name, terminals=terminals)
