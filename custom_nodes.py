@@ -40,10 +40,12 @@ class NormalVectorNode(Node):
 
     @staticmethod
     def calculate_rotation_in_degrees(point):
-        y = point[0]
+        # x and y of the point were switched
+        # so that if the phone lies on the table (with the screen facing upwards)
+        # the rotation is around 0°
         x = point[1]
+        y = point[0]
 
-        # arc tangent of y/x in degrees
         return math.degrees(math.atan2(y, x))
 
 
