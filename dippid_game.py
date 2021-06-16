@@ -11,7 +11,7 @@ from DIPPID import SensorUDP
 
 # short explanation:
 # class Input handler: creates the sensor and registers the callback for button 1, button 2 and the accelerometer
-# class Game: creates the gamefield and a loop that updates the rows "moving to" the player character
+# class Game: creates the game field and a loop that updates the rows "moving to" the player character
 #             and another loop that regularly checks if the player is moving his character (by asking the input handler)
 
 
@@ -155,10 +155,10 @@ class Game():
 def writeInstruction():
     # if connection is lost last input continues...
     instructionText = "Um das Spiel zu beginnen drückt man den '1' Button. \n"\
-                      "Man spielt als 'R' und versucht den 'x' symbolen auszuweichen. \n"\
+                      "Man spielt als 'R' und versucht den 'x' Symbolen auszuweichen. \n"\
                       "Sich innerhalb des 5 x 5 Feldes nach links oder rechts bewegen,"\
                       " kann man mit rotieren des Handys. \n"\
-                      "Wenn man an Hindernisse nicht frontal sondern von rechts oder links kommt,"\
+                      "Wenn man an Hindernisse nicht frontal, sondern von rechts oder links kommt,"\
                       " werden diese zerstört. \n"\
                       "Außerdem kann mit Pressen des '1' Button das Spiel pausieren oder fortfahren. \n"\
                       "Oder mit drücken des '2' Buttons, das Spiel komplett beenden."
