@@ -30,7 +30,7 @@ class InputHandler():
         if number == 0:
             self.__playing = not self.__playing
 
-    def exit_game(self):
+    def exit_game(self, number):
         print("Danke fürs Mitspielen!")
         # this already kills our data flow and i do not have to open a new terminal or kill -9 pot to play again
         os._exit(0)
@@ -114,7 +114,7 @@ class Game():
             print("Game over, du bist mit einem Hindernis kollidiert. (-_-)")
             print("Du hast erfolgreich ", self.__counter, " Reihen bezwungen! :D")
 
-            input_values.exit_game()
+            input_values.exit_game(0)
 
     @staticmethod
     def __create_new_obstacle_row():
